@@ -1,0 +1,12 @@
+python -m venv env
+./env/Scripts/activate
+python -m pip install Django
+pip install deep_translator
+pip install whitenoise
+pip install waitress
+
+python manage.py migrate
+python manage.py makemigrations
+py manage.py collectstatic
+
+add django SECRET_KEY in settings

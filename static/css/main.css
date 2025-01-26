@@ -1,0 +1,352 @@
+/*** Allgemein ***/
+/** Grundaussehen für die ganze Seite **/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #7f8fa6;
+}
+/** Abschnitte **/
+/* Aussehen für die Abschnitte */
+.tab-content {
+    display: none;
+    padding: 50px;
+    border: 1px solid #273c75;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background-color: #7f8fa6;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Aussehen für den aktiven Abschnitt */
+.tab-content.active {
+    display: block;
+}
+/** Button **/
+/* Aussehen für Button */
+.button {
+    width: 200px;
+    border-radius: 3px;
+    background-color: #273c75;
+    color: white;
+    border: none;
+    font-size: 20px;
+}
+/* Aussehen für Button wenn Maus auf Button */
+.hoverButton:hover {
+    background-color: #fbc531;
+    color: black;
+    cursor: pointer;
+}
+/* Aussehen für Schließen-Button */
+.closeWindow {
+    float: right;
+    padding: 6px;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+}
+/* Aussehen für Schließen-Button wenn Maus auf Button */
+.closeWindow:hover {
+    background-color: #273c75;
+    color: white;
+    cursor: pointer;
+}
+/** Symbole **/
+.symbol {
+    font-size: 20px;
+    border: 1px solid #273c75;
+    width: 29px;
+    padding: 0px;
+    display: inline-block;
+    padding-left: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+/* Aussehen für die Symbole wenn Maus auf Symbol */ 
+.symbol:hover {
+    background-color: #fbc531;
+}
+/* Aussehen für kleine Symbole */
+.small-symbol {
+    padding-left: 6px;
+}
+/* Aussehen für mittlere Symbole */
+.middle-symbol {
+    padding-left: 5px;
+}
+/* Aussehen für Symbole von material-symbols */
+.material-symbols-outlined {
+    font-size: 29px;
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+/** Fenster **/
+/* Aussehen für das Fenster */
+.window {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    background-color: rgb(240, 240, 240);
+    padding: 50px;
+    border: 1px solid #273c75;
+}
+/* Aussehen für Abdunkelung und Deaktivierung vom Hintergrund */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 999;
+}
+/** Zentrierung **/
+.center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+/*** Speziell ***/
+/** Menüleiste **/
+/* Aussehen für die Menüleiste */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    background-color: #273c75;
+    border-bottom: 2px solid #273c75;
+}
+/* Aussehen für die Menülinks */
+.tab {
+    flex: 1;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #273c75;
+    color: #fff;
+    border: 1px solid #273c75;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    margin: 0 5px;
+}
+/* Aussehen für den aktiven Menülink */
+.tab.active {
+    background-color: #fbc531;
+    border-color: #7f8fa6;
+    color: #273c75;
+    font-weight: bold;
+}
+/** Abschnitt zum Hinzufügen von Texten **/
+/* Aussehen für Eingabecontainer */
+.inputText {
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+}
+/* Aussehen für den Container mit großem Textfeld */
+.inputText:nth-child(3) {
+    height: 250px;
+}
+/* Aussehen für Eingabefelder */
+.inputText input {
+    width: 30%;
+    height: 30px;
+    border-radius: 3px;
+    border: none;
+    font-size: 20px;
+}
+/* Aussehen für großes Textfeld */
+.inputText textarea{
+    width: 100%;
+    height: 200px;
+    border-radius: 3px;
+    border: none;
+    font-size: 20px;
+    vertical-align: top;
+}
+/* Aussehen für "Abschicken"-Button */
+.submit input{
+    height: 50px;
+}
+/** Abschnitt für die Texte **/
+/* Diesen Abschnitt standartmäßig anzeigen */
+#libary {
+    display: block;
+}
+/* Aussehen für das Cover der Texte */
+.post {
+    display: inline-block;
+    width: 500px;
+    height: 250px;
+    border: 3px solid #273c75;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.6);
+    background-color: white;
+    padding: 20px;
+    cursor: pointer;
+    margin-top: 3px;
+}
+/* Aussehen für das Fenster zum Bearbeiten eines Textes */
+.editPost {
+    width: 50%;
+}
+/* Aussehen eines geöffneten Textes */
+.content {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    border: 1px solid #273c75;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    background-color: #7f8fa6;
+    box-sizing: border-box;
+}
+/* Aussehen für den Titel eines Textes */
+.openPost h2 {
+    display: flex;
+    justify-content: center;
+    float: left;
+    margin-top: 0;
+}
+/* Ausrichtung wieder zurücksetzen */
+.openPost p {
+    clear: both;
+}
+/* Aussehen für englischen und deutschen Text */
+.english, .german {
+    font-size: 20px;
+    line-height: 150%;
+    word-spacing: 5px;
+    background-color: rgb(240,240,240);
+    padding: 20px;
+}
+/* Aussehen für das übersetzte Wort */
+.translation {
+    display: none;
+    background-color: white;
+    position: absolute;
+    font-size: 20px;
+    padding: 2px;
+    border: 1px solid #273c75;
+}
+/* Aussehen für den Als-Vokabel-Hinzufügen-Button */
+.saveVocabulary {
+    display: none;
+    background-color: white;
+    position: absolute;
+    font-size: 15px;
+    border: 1px solid #273c75;
+}
+/** Abschnitt für Vokabeln **/
+/* Aussehnen für den Eigene-Vokablen-Hinzufügen-Button */
+.ownVocabButton {
+    height: 70px;
+    margin-bottom: 30px;
+}
+/* Aussehen für den Lernen-Button */
+.studyButton {
+    height: 40px;
+    margin-bottom: 100px;
+}
+/* Aussehen für Fenster zum Lernen von Vokablen */
+.studyArea {
+    display: none;
+    position: absolute;
+    top: 4.5%;
+    left: 0;
+    width: 100%;
+    height: 95.5%;
+    background-color: white;
+}
+/* Aussehen für den Flip-Card-Container */
+.flip-card {
+    background-color: transparent;
+    border: 1px solid #273c75;
+    perspective: 2000px;
+    width: 60%;
+    height: 60%;
+    margin: auto;
+    margin-top: 10%;
+}
+/* Aussehen für den Container zum positionieren von Vorder- und Rückseite */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+/* Aussehen für Vorder- und Rückseite */
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+/* Aussehen für Vorderseite */
+.flip-card-front {
+    background-color: #7f8fa6;
+    color: black;
+}
+/* Aussehen für Rückseite */
+.flip-card-back {
+    background-color: #7f8fa6;
+    color: white;
+    transform: rotateY(180deg);
+}
+/* Aussehen für Container mit Vokabel */
+.vocabDiv {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* Aussehen für Vokabel */
+#englishVocab, #germanVocab {
+    font-size: 50px;
+    color: white;
+}
+/* Aussehen für die Richtig- und Falsch-Button */
+.correct, .false {
+    background-color: #273c75;
+    border: 1px solid #273c75;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    padding: 9px;
+}
+/* Positionierung für Richtig-Button */
+.correct {
+    float: left;
+    margin-left: 40%;
+}
+/* Positionierung für Falsch-Button */
+.false {
+    float: right;
+    margin-right: 40%;
+}
+/* Aussehen für Vokabelliste */
+.list {
+    width: 60%;
+    padding: 20px;
+    background-color: white;
+}
+/* Aussehen für Vokabel-Container */
+.vocable {
+    width: 100%;
+}
+/* Aussehen für deutsches und englisches Wort */
+.german_word, .english_word {
+    width: calc(50% - 37px);
+    display: inline-block;
+    font-size: 20px;
+}

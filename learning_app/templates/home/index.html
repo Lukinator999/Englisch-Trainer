@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vokabeltrainer</title>
+    <!-- Importiere das Aussehen für bestimmte Symbole -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Importiere das Aussehen aller Objekte -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- Importiere die Funktionen der Seite -->
+    <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+    <!-- Menüleiste -->
+    <div class="tab-container">
+        <div class="tab" onclick="openTab(event, 'add')"><div class="center">Hinzufügen</div></div>
+        <div class="tab active" onclick="openTab(event, 'library')"><div class="center">Bibliothek</div></div>
+        <div class="tab" onclick="openTab(event, 'vocab')"><div class="center">Vokabeln</div></div>
+    </div>
+    <!-- Abschnitt zum Hinzufügen von Texten -->
+    <div id="add" class="tab-content">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="inputText">
+                Titel: {{form.title}}
+            </div>
+            <div class="inputText">
+                Text: {{form.english_text}}
+            </div>
+            <div class="submit center">
+                <input type="submit" value="Abschicken" class="button hoverButton">
+            </div>
+        </form>
+    </div>
+    <!-- Abschnitt für die Texte -->
+    <div id="library" class="tab-content active">
+        <!-- Ungelesene Texte-->
+        <div id="new">
+            <h2>Neu</h2>
+            {% for post in posts %}
+            <div id="n{{post.id}}" onclick="openText('{{post.id}}')" class="post" data-read="{{post.read}}">
+                <h2>{{post.title}}</h2>
+                <span class="symbol" onclick="editPost(event, '{{post.english_text|escapejs}}', '{{post.german_text|escapejs}}', '{{post.id}}')">&#x270E;</span>
+                <span class="symbol small-symbol" onclick="delPost(event, '{{post.id}}')">&#x1F5D1;</span>
+                <span class="symbol small-symbol" onclick="finishedPost(event, 'true', '{{post.id}}')">&#10003;</span>
+                <p>{{post.date}}</p>
+                <p>{{post.length}} Words</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Gelesene Texte -->
+        <div id="read">
+            <h2>Gelesen</h2>
+            {% for post in posts %}
+            <div id="r{{post.id}}" onclick="openText('{{post.id}}')" class="post" data-read="{{post.read}}">
+                <h2>{{post.title}}</h2>
+                <span class="symbol" onclick="editPost(event, '{{post.english_text|escapejs}}', '{{post.german_text|escapejs}}', '{{post.id}}')">&#x270E;</span>
+                <span class="symbol small-symbol" onclick="delPost(event, '{{post.id}}')">&#x1F5D1;</span>
+                <span class="symbol middle-symbol" onclick="finishedPost(event, 'false', '{{post.id}}')">&#10006;</span>
+                <p>{{post.date}}</p>
+                <p>{{post.length}} Words</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Fenster zum Bearbeiten eines Textes -->
+        <div class="overlay" id="overlay1">
+            <div class="window editPost" id="editPost">
+                <form action="" method="POST" onsubmit="close_editPost()">
+                    {% csrf_token %}
+                    <p>Bearbeiten</p>
+                    <input type="hidden" name="is_edited_text" value="true">
+                    <input id="idPost" type="hidden" name="idPost">
+                    <textarea name="english_text" cols="95" rows="10" maxlength="10000" required id="edit_english_text"></textarea>
+                    <textarea name="german_text" cols="95" rows="10" maxlength="15000" required id="edit_german_text"></textarea>
+                    <input type="button" value="Abbrechen" class="cancel" onclick="close_editPost()">
+                    <input type="submit" value="Speichern" class="save">
+                </form>
+            </div>
+        </div>
+        <!-- Fenster zum Löschen eines Textes -->
+        <div class="overlay" id="overlay2">
+            <div class="window" id="deletePost">
+                <form action="" method="POST" onsubmit="close_deletePost()">
+                    {% csrf_token %}
+                    <p>Bist du sicher</p>
+                    <input type="hidden" name="is_delete_text" value="true">
+                    <input id="idePost" type="hidden" name="idePost">
+                    <input type="button" value="Abbrechen" class="cancel" onclick="close_deletePost()">
+                    <input type="submit" value="Löschen" class="delete">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Fenster mit geöffnetem Text -->
+    {% for post in posts %}
+    <div id="{{post.id}}" class="content">
+        <div class="openPost">
+            <h2>{{post.title}}</h2>
+            <div class="closeWindow">
+                <span onclick="closeText('{{post.id}}')" class="material-symbols-outlined">close</span>
+            </div>
+            <p>{{post.date}}</p>
+            <button onclick="saveVocabulary(event)" class="saveVocabulary">Speichern</button>
+            <span class="translation"></span>
+            <p id="english" class="english" onclick="translateWord(event)">{{post.english_text}}</p>
+            <p class="german">{{post.german_text}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    <!-- Abschnitt für Vokabeln -->
+    <div id="vocab" class="tab-content">
+        <div class="center">
+            <button class="ownVocabButton button hoverButton" onclick="ownVocab()">Eigenes Vokabel hinzufügen</button>
+        </div>
+        <div class="center">
+            <button class="studyButton button hoverButton" onclick="studyVocabulary()">Lernen</button>
+        </div>
+        <!-- Fenster zum Hinzufügen von Vokabeln -->
+        <div class="overlay" id="overlay5">
+            <div id="newVocab" class=" window">
+                <form id="vocabForm" action="" method="POST" onsubmit="return submitVocab()">
+                    {% csrf_token %}
+                    <p>Neues Vokabel</p>
+                    <input id='english_word' type="text" name="english" maxlength="50" required>
+                    <input id='german_word' type="text" name="german" maxlength="50" required>
+                    <input type="button" value="Abbrechen" onclick="close_ownVocab()">
+                    <input type="submit" value="Speichern">
+                </form>
+            </div>
+        </div>
+        <!-- Fenster zum Lernen von Vokabeln -->
+        <div id="studyArea" class="studyArea">
+            <div class="closeWindow">
+                <span onclick="close_studyArea()" class="material-symbols-outlined">close</span>
+            </div>
+            <div onclick="turnVocab()" id="flip-card" class="flip-card">
+                <div id="flip-inner" class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div class="vocabDiv">
+                            <span id="germanVocab"></span>
+                        </div>
+                    </div>
+                    <div id="flip-back" class="flip-card-back">
+                        <div class="vocabDiv">
+                            <span id="englishVocab"></span>
+                        </div>
+                        <div class="correct hoverButton" onclick="correctVocab()">
+                            <span class="material-symbols-outlined">done</span>
+                        </div>
+                        <div class="false hoverButton" onclick="falseVocab()">
+                            <span class="material-symbols-outlined">close</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Vokabelliste -->
+        <div class="center">
+            <div class="list">
+                {% for vocab in vocabulary %}
+                <div class="vocable">
+                    <span class="english_word">{{vocab.english_word}}</span>
+                    <span class="german_word">{{vocab.german_word}}</span>
+                    <span class="symbol" onclick="edit('{{vocab.english_word}}', '{{vocab.german_word}}', '{{vocab.id}}')">&#x270E;</span>
+                    <span class="symbol small-symbol" onclick="del('{{vocab.id}}')">&#x1F5D1;</span>
+                </div>
+                <hr>
+                {% endfor %}
+                <!-- Fenster zum Bearbeiten von Vokabeln -->
+                <div class="overlay" id="overlay3">
+                    <div class="window" id="edit">
+                        <form action="" method="POST" onsubmit="close_edit()">
+                            {% csrf_token %}
+                            <p>Bearbeiten</p>
+                            <input type="hidden" name="is_edited_vocab" value="true">
+                            <input id="id" type="hidden" name="id">
+                            <input id='edit_english_word' type="text" name="english">
+                            <input id='edit_german_word' type="text" name="german">
+                            <input type="button" value="Abbrechen" class="cancel" onclick="close_edit()">
+                            <input type="submit" value="Speichern" class="save">
+                        </form>
+                    </div>
+                </div>
+                <!-- Fenster zum Löschen von Vokabeln -->
+                <div class="overlay" id="overlay4">
+                    <div class="window" id="delete">
+                        <form action="" method="POST" onsubmit="close_delete()">
+                            {% csrf_token %}
+                            <p>Bist du sicher</p>
+                            <input type="hidden" name="is_delete_vocab" value="true">
+                            <input id="ide" type="hidden" name="ide">
+                            <input type="button" value="Abbrechen" class="cancel" onclick="close_delete()">
+                            <input type="submit" value="Löschen" class="delete">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
